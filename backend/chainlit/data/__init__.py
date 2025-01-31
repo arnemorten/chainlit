@@ -60,7 +60,7 @@ def get_data_layer():
                 # Azure Storage
                 azure_storage_account = os.getenv("APP_AZURE_STORAGE_ACCOUNT")
                 azure_storage_key = os.getenv("APP_AZURE_STORAGE_ACCESS_KEY")
-                azure_sas_token_duration = int(os.getenv('SAS_TOKEN_DURATION', '3600'))
+                azure_sas_token_duration = int(os.getenv('APP_AZURE_STORAGE_SAS_TOKEN_DURATION', '3600'))
                 is_using_azure = bool(azure_storage_account and azure_storage_key)
 
                 storage_client = None
