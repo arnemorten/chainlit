@@ -60,6 +60,7 @@ def get_data_layer():
                 # Azure Storage
                 azure_storage_account = os.getenv("APP_AZURE_STORAGE_ACCOUNT")
                 azure_storage_key = os.getenv("APP_AZURE_STORAGE_ACCESS_KEY")
+                azure_sas_token_duration = int(os.getenv('SAS_TOKEN_DURATION', '3600'))
                 is_using_azure = bool(azure_storage_account and azure_storage_key)
 
                 storage_client = None
@@ -96,6 +97,7 @@ def get_data_layer():
                         container_name=bucket_name,
                         storage_account=azure_storage_account,
                         storage_key=azure_storage_key,
+                        sas_token_duration=azure_sas_token_duration,
                     )
 
                 _data_layer = ChainlitDataLayer(

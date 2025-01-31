@@ -4,15 +4,16 @@ from typing import Any, Dict, Union
 from azure.storage.blob import BlobSasPermissions, ContentSettings, generate_blob_sas
 from azure.storage.blob.aio import BlobServiceClient as AsyncBlobServiceClient
 
-from chainlit.data.storage_clients.base import EXPIRY_TIME, BaseStorageClient
+from chainlit.data.storage_clients.base import BaseStorageClient
 from chainlit.logger import logger
 
 
 class AzureBlobStorageClient(BaseStorageClient):
-    def __init__(self, container_name: str, storage_account: str, storage_key: str):
+    def __init__(self, container_name: str, storage_account: str, storage_key: str, sas_token_duration : int):
         self.container_name = container_name
         self.storage_account = storage_account
         self.storage_key = storage_key
+        self.sas_token_duration = sas_token_duration 
         connection_string = (
             f"DefaultEndpointsProtocol=https;"
             f"AccountName={storage_account};"
@@ -33,7 +34,7 @@ class AzureBlobStorageClient(BaseStorageClient):
 
         sas_permissions = BlobSasPermissions(read=True)
         start_time = datetime.now()
-        expiry_time = start_time + timedelta(seconds=EXPIRY_TIME)
+        expiry_time = start_time + timedelta(seconds=self.sas_token_duration)
 
         sas_token = generate_blob_sas(
             account_name=self.storage_account,
